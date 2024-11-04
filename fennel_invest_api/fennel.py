@@ -269,7 +269,7 @@ class Fennel:
 
     @check_login
     def place_order(
-        self, account_id, ticker, quantity, side, price="market", dry_run=False
+        self, account_id, ticker, quantity, side, price="market", dry_run=False, isin=False
     ):
         if side.lower() not in ["buy", "sell"]:
             raise Exception("Side must be either 'buy' or 'sell'")
@@ -277,7 +277,8 @@ class Fennel:
         if not self.is_market_open():
             raise Exception("Market is closed. Cannot place order.")
         # Search for stock "isin"
-        isin = self.get_stock_isin(ticker)
+        if isin is False:
+            isin = self.get_stock_isin(ticker)
         if isin is None:
             raise Exception(f"Failed to find ISIN for stock with ticker {ticker}")
         # Check if stock is tradable
